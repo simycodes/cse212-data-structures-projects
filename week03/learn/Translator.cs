@@ -22,9 +22,13 @@ public class Translator
     /// <param name="fromWord">The word to translate from</param>
     /// <param name="toWord">The word to translate to</param>
     /// <returns>fixed array of divisors</returns>
+    
+    // The AddWord function should allow the user to add word translations 
+    //(e.g. english to german)
     public void AddWord(string fromWord, string toWord)
     {
         // ADD YOUR CODE HERE
+        _words.Add(fromWord, toWord);
     }
 
     /// <summary>
@@ -32,9 +36,18 @@ public class Translator
     /// </summary>
     /// <param name="fromWord">The word to translate</param>
     /// <returns>The translated word or "???" if no translation is available</returns>
+    
+    // The Translate function should return the translation of a word. If the 
+    // translation is not available for a word, then "???" should be returned
     public string Translate(string fromWord)
     {
         // ADD YOUR CODE HERE
-        return "";
+        if(_words.ContainsKey(fromWord))
+        {
+            return _words[fromWord];
+        }
+        else {
+            return "???";
+        }
     }
 }

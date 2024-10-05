@@ -22,7 +22,31 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        // [am, at, ma, if, fi]
+        HashSet<string> listOfWords = new HashSet<string>();
+        List<string> symmetricPairs = new List<string>();
+
+        for (int i = 0; i < words.Length; i++)
+        {
+            string word = words[i];
+            string pairWord = new string(word.ToCharArray().Reverse().ToArray());
+            if (!listOfWords.Contains(pairWord))
+            {
+                listOfWords.Add(word);
+            }
+            else
+            {
+                if (word != pairWord)
+                {
+                    symmetricPairs.Add($"{word} & {pairWord}");
+                    listOfWords.Remove(pairWord); 
+                }
+                
+            }
+        }
+
+        return symmetricPairs.ToArray();
+        
     }
 
     /// <summary>
@@ -43,6 +67,16 @@ public static class SetsAndMaps
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
+            // ENTER DEGREE TYPE/EDUCATION LEVEL IF NOT YET ENTERED
+            if(!degrees.ContainsKey(fields[3])) 
+            {
+                degrees[fields[3]] = 1;
+            }
+            else {
+                // COUNT HOW MANY TIMES IT OCCURS
+                degrees[fields[3]] += 1;
+            }
+
         }
 
         return degrees;
@@ -67,7 +101,54 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // Two words are an anagram if they use the same letters and the same number 
+        // of letters."CAT" and "ACT" are anagrams but "DOG" and "GOOD"
+        Dictionary<char, int> typeAndNumberOfLetters = new Dictionary<char, int>();
+        Dictionary<char, int> typeAndNumberOfLetters2 = new Dictionary<char, int>();
+        // CONVERT WORDS TO LOWER CASES
+        word1 = word1.ToLower();
+        word2 = word2.ToLower();
+        // IGNORE ANY CASES
+        word1 = word1.Replace(" ", "");
+        word2 = word2.Replace(" ", "");
+
+        // CHECK WORDS IF THEY HAVE THE SAME TYPE OF WORDS
+        foreach (char letter in word1)
+        {
+            if (!typeAndNumberOfLetters.ContainsKey(letter))
+            {
+                typeAndNumberOfLetters[letter] = 1;
+            }
+            else
+            {
+                typeAndNumberOfLetters[letter]++;
+            }
+        }
+
+        foreach (char letter in word2)
+        {
+            if (!typeAndNumberOfLetters2.ContainsKey(letter))
+            {
+                typeAndNumberOfLetters2[letter] = 1;
+            }
+            else
+            {
+                typeAndNumberOfLetters2[letter]++;
+            }
+        }
+
+        // CHECK IF THE DICTIONARIES ARE EQUAL
+        bool sameLetters = typeAndNumberOfLetters.OrderBy(i=>i.Key).SequenceEqual(typeAndNumberOfLetters2.OrderBy(i=>i.Key));
+
+        if(sameLetters) 
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+
     }
 
     /// <summary>
@@ -99,8 +180,21 @@ public static class SetsAndMaps
         // TODO Problem 5:
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
-        // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
+
+        // 2. Add code below to create a string out each place a earthquake has happened today and its magnitude.
         // 3. Return an array of these string descriptions.
-        return [];
+
+        var earthquakes = new List<string>();
+        foreach (var feature in featureCollection.Features)
+        {
+            string place = feature.Properties.Place;
+            double? magnitude = feature.Properties.Mag;
+
+            // Console.WriteLine($"{place} - Mag {magnitude:F2}");
+            earthquakes.Add($"{place} - Mag {magnitude:F2}");
+        }
+
+        return earthquakes.ToArray();
+        
     }
 }
